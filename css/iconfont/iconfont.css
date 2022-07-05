@@ -1,0 +1,26 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3500945 */
+  src: url('iconfont.woff2?t=1656995275630') format('woff2'),
+       url('iconfont.woff?t=1656995275630') format('woff'),
+       url('iconfont.ttf?t=1656995275630') format('truetype');
+}
+
+
+.iconfont {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display,inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    
+    font-family: "iconfont" !important;
+    font-size: 22px;
+}
+
+.icon-zhihu-circle-fill:before {
+  content: "\ea8b";
+}
+
+
