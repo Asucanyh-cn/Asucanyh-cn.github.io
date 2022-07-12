@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>部署Hexo框架并应用Butterfly主题</title>
+      <link href="/2022/07/12/%E9%83%A8%E7%BD%B2Hexo%E6%A1%86%E6%9E%B6%E5%B9%B6%E5%BA%94%E7%94%A8Butterfly%E4%B8%BB%E9%A2%98/"/>
+      <url>/2022/07/12/%E9%83%A8%E7%BD%B2Hexo%E6%A1%86%E6%9E%B6%E5%B9%B6%E5%BA%94%E7%94%A8Butterfly%E4%B8%BB%E9%A2%98/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="部署Hexo框架并应用Butterfly主题"><a href="#部署Hexo框架并应用Butterfly主题" class="headerlink" title="部署Hexo框架并应用Butterfly主题"></a>部署Hexo框架并应用Butterfly主题</h1><p>系统：Centos7</p><h2 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y git</span><br></pre></td></tr></table></figure><h2 id="安装node-js和npm工具"><a href="#安装node-js和npm工具" class="headerlink" title="安装node.js和npm工具"></a>安装node.js和npm工具</h2><h3 id="一键部署"><a href="#一键部署" class="headerlink" title="一键部署"></a>一键部署</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y nodejs</span><br><span class="line">yum install -y npm</span><br></pre></td></tr></table></figure><p>Centos7下可能出现的问题</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# yum install -y nodejs</span><br><span class="line">已加载插件：fastestmirror</span><br><span class="line">Loading mirror speeds from cached hostfile</span><br><span class="line"> * base: mirrors.cn99.com</span><br><span class="line"> * extras: mirrors.aliyun.com</span><br><span class="line"> * updates: mirrors.huaweicloud.com</span><br><span class="line">没有可用软件包 nodejs。</span><br><span class="line">错误：无须任何处理</span><br></pre></td></tr></table></figure><h3 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h3><!--注意，以下演示操作均在root目录中进行，可以根据自己需求更换--><p>进入<a href="https://nodejs.org/en/download/">官网</a>，请根据自己的操作系统选择nodejs版本，演示使用<strong>Linux Binaries (x64)</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install wget -y</span><br><span class="line">wget https://nodejs.org/dist/v16.16.0/node-v16.16.0-linux-x64.tar.xz</span><br></pre></td></tr></table></figure><p>解压</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf node-v16.16.0-linux-x64.tar.xz</span><br></pre></td></tr></table></figure><p>设置全局变量（使用添加软连接的方式）</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ln -s /root/node-v16.16.0-linux-x64/bin/node /usr/local/bin/node</span><br><span class="line"></span><br><span class="line">ln -s /root/node-v16.16.0-linux-x64/bin/npm /usr/local/bin/npm</span><br></pre></td></tr></table></figure><p>测试</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# node -v</span><br><span class="line">v16.15.1</span><br><span class="line">[root@localhost ~]# npm -v</span><br><span class="line">8.11.0</span><br></pre></td></tr></table></figure><h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a><a href="https://hexo.io/zh-cn/docs/#%E5%AE%89%E8%A3%85-Hexo">安装Hexo</a></h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure><p>将Hexo命令添加到环境变量中</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /root/node-v8.9.4-linux-x64/lib/node_modules/hexo-cli/bin/hexo /usr/local/bin/hexo</span><br></pre></td></tr></table></figure><h2 id="使用Hexo"><a href="#使用Hexo" class="headerlink" title="使用Hexo"></a><a href="https://hexo.io/zh-cn/docs/setup">使用Hexo</a></h2><p>此处非本文重点，请查阅<a href="https://hexo.io/zh-cn/docs/setup">Hexo中文文档</a>。</p><h2 id="应用Butterfly主题"><a href="#应用Butterfly主题" class="headerlink" title="应用Butterfly主题"></a><a href="https://butterfly.js.org/posts/21cfbf15/">应用Butterfly主题</a></h2><p>进入Hexo根目录，即hexo init <folder>命令初始化的文件夹中</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone -b master https://gitee.com/immyw/hexo-theme-butterfly.git themes/butterfly</span><br></pre></td></tr></table></figure><p>修改 Hexo 根目录下的 _config.yml，把主题改为butterfly</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: butterfly</span><br></pre></td></tr></table></figure><p>修改完毕后，启用网站发现网页显示如下内容</p><hr><p>extends includes&#x2F;layout.pug block content include .&#x2F;includes&#x2F;mixins&#x2F;post-ui.pug #recent-posts.recent-posts +postUI include includes&#x2F;pagination.pug</p><hr><p>请下载安装 pug 以及 stylus 的渲染器</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br></pre></td></tr></table></figure><p>安装完毕后重新运行，即可应用Butterfly主题</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Hexo </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+            <tag> Butterfly </tag>
+            
+            <tag> npm </tag>
+            
+            <tag> nodejs </tag>
+            
+            <tag> git </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Hexo Butterfly主题美化</title>
       <link href="/2022/07/05/Hexo%20Butterfly%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/"/>
       <url>/2022/07/05/Hexo%20Butterfly%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96/</url>
