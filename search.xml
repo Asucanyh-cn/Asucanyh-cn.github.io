@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>Shell脚本学习 Day1</title>
+      <link href="/2022/07/13/shell%E8%84%9A%E6%9C%AC%E5%AD%A6%E4%B9%A0Day1/"/>
+      <url>/2022/07/13/shell%E8%84%9A%E6%9C%AC%E5%AD%A6%E4%B9%A0Day1/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script><h1 id="什么是shell？"><a href="#什么是shell？" class="headerlink" title="什么是shell？"></a>什么是shell？</h1><h1 id="shell和运维的关系？"><a href="#shell和运维的关系？" class="headerlink" title="shell和运维的关系？"></a>shell和运维的关系？</h1><p>实现自动化运维！</p><p>shell脚本语言很适合处理纯文本类型数据，且Linux的哲学思想就是一切皆文件，如：日志、配置文件、文本、网页文件，大多数都是纯文本类型的，因此shell可以方便的进行文本处理，好比强大的Linux三剑客(grep、seq、awk)</p><h1 id="shell的作用是什么？"><a href="#shell的作用是什么？" class="headerlink" title="shell的作用是什么？"></a>shell的作用是什么？</h1><!--使用Linux的过程都是shell在干活--><p>解释执行用户输入的命令和程序</p><p>用户输入一条命令，shell就解释一条</p><p>键盘输入命令，Linux给与相应的方式，称之为交互式</p><h1 id="shell的地位"><a href="#shell的地位" class="headerlink" title="shell的地位"></a>shell的地位</h1><p>对接用户且包裹着系统核心的一层壳</p><h1 id="什么是shell脚本？"><a href="#什么是shell脚本？" class="headerlink" title="什么是shell脚本？"></a>什么是shell脚本？</h1><p>当命令或程序写在文件中，执行文件读取其中的代码，这个程序文件就称之为shell脚本。</p><p><strong>shell脚本语言是属于一种弱类型语言，无需声明变量类型，直接定义使用；强类型语言，必须先定义变量类型，确定是数字、字符串等，之后再赋予同类型的值。</strong></p><p>在shell脚本里定义多条Linux命令以及循环控制语句，然后将这些Linux命令一次性执行完毕，执行脚本文件的方式称之为，非交互式。</p><ul><li><p>Windows中的*.bat批处理脚本</p></li><li><p>Linux中常用*.sh脚本文件</p></li></ul><h1 id="第一个shell脚本"><a href="#第一个shell脚本" class="headerlink" title="第一个shell脚本"></a>第一个shell脚本</h1><p>hello.sh</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#! /bin/bash</span><br><span class="line">#这是第一个shell脚本</span><br><span class="line">echo &quot;我是第一个shell脚本&quot;</span><br></pre></td></tr></table></figure><h2 id="Shebang"><a href="#Shebang" class="headerlink" title="Shebang"></a>Shebang</h2><p> 第一行出现的前两个字符#！称为Shebang。</p><p>在Unix系统中，程序会分析Shebang后面的内容，作为解析器的指令，如：</p><ul><li>以#！ &#x2F;bin&#x2F;sh开头的文件，程序在执行时会调用&#x2F;bin&#x2F;sh，也就是bash解释器</li><li>以#！ &#x2F;usr&#x2F;bin&#x2F;python开头的文件，代表指定python解释器去执行</li><li>以#！ &#x2F;usr&#x2F;bin&#x2F;env解释器名称，是一种在不同平台上都能正确找到解释器的办法</li></ul><h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul><li>若脚本未指定Shebang，脚本执行的时候会默认用当前的shell去解释脚本，即$SHELL；</li><li>如果Shebang指定了可执行的解释器，如&#x2F;bin&#x2F;bash &#x2F;usr&#x2F;bin&#x2F;python，脚本执行时，文件名会作为参数传递给解释器；</li><li>如果#！指定的解释器没有可执行权限，则会报“bad interpreter :Permission denied”；</li><li>如果#！指定的解释程序不存在，那么会报“bad interpreter:No such file or directory”；</li><li>#！之后的解释程序，需要写其他绝对路径（如：#! &#x2F;bin&#x2F;bash）,它是不会自动到$PATH中寻找解释器的；</li><li>如果使用“bash test.sh”这样的命令来执行脚本，那么#！这一行将会被忽略，解释器当然是用命令行中显式指定的bash。</li></ul><h2 id="执行脚本"><a href="#执行脚本" class="headerlink" title="执行脚本"></a>执行脚本</h2><h3 id="情况一-直接输入文件名"><a href="#情况一-直接输入文件名" class="headerlink" title="情况一   直接输入文件名"></a>情况一   直接输入文件名</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello.sh</span><br></pre></td></tr></table></figure><p>提示</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-bash: hello.sh: 未找到命令</span><br></pre></td></tr></table></figure><p>原因：PATH中没有这个命令。因为在命令行中的命令都会去PATH中去查找</p><h3 id="情况二-使用相对路径"><a href="#情况二-使用相对路径" class="headerlink" title="情况二  使用相对路径"></a>情况二  使用相对路径</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./hello.sh</span><br></pre></td></tr></table></figure><p>相当于</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$SHELL ./hello.sh</span><br></pre></td></tr></table></figure><p>若提示</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-bash: ./hello.sh: 权限不够</span><br></pre></td></tr></table></figure><p>解决方法，为文件添加执行权限</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x hello.sh</span><br></pre></td></tr></table></figure><h3 id="情况三-为脚本指定解释器"><a href="#情况三-为脚本指定解释器" class="headerlink" title="情况三  为脚本指定解释器"></a>情况三  为脚本指定解释器</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/bash ./hello.sh</span><br></pre></td></tr></table></figure><!--情况一是情老师况三的特例，在未指定解释器时，默认指定$SHELL--><p>情况四  使用source或.执行</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source hello.sh</span><br><span class="line">. hello.sh</span><br></pre></td></tr></table></figure><p>情况五  重定向的理念（少见用法）</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sh &lt; hello.sh</span><br><span class="line">bash &lt; hello.sh</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Shell </tag>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>部署Hexo框架并应用Butterfly主题</title>
       <link href="/2022/07/12/%E9%83%A8%E7%BD%B2Hexo%E6%A1%86%E6%9E%B6%E5%B9%B6%E5%BA%94%E7%94%A8Butterfly%E4%B8%BB%E9%A2%98/"/>
       <url>/2022/07/12/%E9%83%A8%E7%BD%B2Hexo%E6%A1%86%E6%9E%B6%E5%B9%B6%E5%BA%94%E7%94%A8Butterfly%E4%B8%BB%E9%A2%98/</url>
@@ -73,7 +100,7 @@
       
       <categories>
           
-          <category> Hexo </category>
+          <category> 计算机网络 </category>
           
       </categories>
       
@@ -102,7 +129,7 @@
       
       <categories>
           
-          <category> Hexo </category>
+          <category> 计算机网络 </category>
           
       </categories>
       
