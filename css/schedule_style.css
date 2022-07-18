@@ -1,4 +1,4 @@
-body{
+/*body{
     margin: 0;
     padding: 0;
     background-color:#ff6d6d;
@@ -33,7 +33,7 @@ body{
 
 .social a:last-of-type:after{content:""}
 
-
+*/
 .box{
     margin:0 10%;
     height: 630px;
