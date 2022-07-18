@@ -24,6 +24,8 @@
             
             <tag> Linux </tag>
             
+            <tag> Centos </tag>
+            
         </tags>
       
     </entry>
@@ -50,6 +52,8 @@
             <tag> Shell </tag>
             
             <tag> Linux </tag>
+            
+            <tag> Centos </tag>
             
         </tags>
       
@@ -78,6 +82,8 @@
             
             <tag> Linux </tag>
             
+            <tag> Centos </tag>
+            
         </tags>
       
     </entry>
@@ -104,6 +110,8 @@
             <tag> Shell </tag>
             
             <tag> Linux </tag>
+            
+            <tag> Centos </tag>
             
         </tags>
       
@@ -158,6 +166,8 @@
             <tag> Shell </tag>
             
             <tag> Linux </tag>
+            
+            <tag> Centos </tag>
             
         </tags>
       
@@ -244,9 +254,9 @@
       
         <tags>
             
-            <tag> frp </tag>
-            
             <tag> Centos </tag>
+            
+            <tag> frp </tag>
             
         </tags>
       
