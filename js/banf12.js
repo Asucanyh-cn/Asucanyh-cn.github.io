@@ -49,3 +49,7 @@ function forbidden_control() {
         }), !1
     }
 }
+window.onload=function()
+	{
+  		forbidden_control();
+	}
