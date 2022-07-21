@@ -1,4 +1,4 @@
-function forbidden_control() {
+window.onload=function(){
     $.extend({
         message: function(a) {
             var b = {
@@ -49,7 +49,4 @@ function forbidden_control() {
         }), !1
     }
 }
-window.onload=function()
-	{
-  		forbidden_control();
-	}
+
