@@ -33,6 +33,41 @@
     
     
     <entry>
+      <title>正则表达式与Linux文本三剑客Day1</title>
+      <link href="/posts/946884611/"/>
+      <url>/posts/946884611/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Linux文本三剑客"><a href="#Linux文本三剑客" class="headerlink" title="Linux文本三剑客"></a>Linux文本三剑客</h1><blockquote><p>文本处理工具均支持正则表达式引擎</p><ol><li>grep：文本过滤工具，通过模式pattern工具进行匹配</li><li>sed：文本编辑工具，stream editor 流编辑器</li><li>awk：Linux文本报告生成器（格式化文本）   本质是gawk，awk是软连接（快捷方式）</li></ol></blockquote><h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><h3 id="基本正则表达式BRE集合"><a href="#基本正则表达式BRE集合" class="headerlink" title="基本正则表达式BRE集合"></a>基本正则表达式BRE集合</h3><table><thead><tr><th align="left">字符</th><th>作用</th><th>举例&#x2F;说明</th></tr></thead><tbody><tr><td align="left">^</td><td>尖角号，用于模式最左边，匹配以某字符串<code>开头</code>的行</td><td>^apple，匹配以apple单词开头的行</td></tr><tr><td align="left">$</td><td>美元符，用于模式最右边，匹配以某字符串<code>结尾</code>的行</td><td>abc$，匹配以abc结尾的行</td></tr><tr><td align="left">^$</td><td>组合符，表示空行</td><td>匹配以空字符开头、空字符结尾的行，也就是空行</td></tr><tr><td align="left">.</td><td>小数点，匹配任意一个<code>有且只有一个</code>字符，不能匹配空格</td><td>一行有多个字符的情况呢？是算一个字符还是多个字符然后匹配其中一个？</td></tr><tr><td align="left">\</td><td>反斜杠，转义字符，用于还原字符原本的含义</td><td>“\.”，输出的结果是一个普通的小数点</td></tr><tr><td align="left">*</td><td>星号，匹配前一个字符<code>连续出现</code>0次或1次以上，重复0次代表空，即匹配所有内容</td><td>a*，表示匹配多个连续的a字符</td></tr><tr><td align="left">.*</td><td>组合符，匹配所有内容除了空行</td><td>.*，输出所有行的内容除了空行</td></tr><tr><td align="left">^.*</td><td>组合符，匹配任意多个字符<code>开头</code>的内容</td><td>挺奇怪的，有点抽象</td></tr><tr><td align="left">.*$</td><td>组合符，匹配任意多个字符<code>结尾</code>的内容</td><td>挺奇怪的，有点抽象x2</td></tr><tr><td align="left">[abc]</td><td>中括号，匹配中括号中的任意一个字符，a或b或c，也可以写成[a-c]</td><td>^[a-z]，用这个不就实现了匹配以任意小写字母开头的行嘛</td></tr><tr><td align="left">[^abc]</td><td>中括号内带尖角符，匹配<code>除了</code>中括号中的任意一个字符的其它字符</td><td>相当于对[abc]的结果取反嘛</td></tr></tbody></table><h3 id="拓展正则表达式ERE集合"><a href="#拓展正则表达式ERE集合" class="headerlink" title="拓展正则表达式ERE集合"></a>拓展正则表达式ERE集合</h3><blockquote><p>拓展正则必须使用grep -E 才能生效</p><p><code>TIPS:</code></p><p>egrep不推荐使用，使用grep -E代替</p><p>grep不加参数时，需要在特殊字符前加转义符\才能识别为正则表达式</p></blockquote><table><thead><tr><th>字符</th><th>作用</th><th>说明</th></tr></thead><tbody><tr><td>+</td><td>加号，匹配前一个字符一次或者多次</td><td>a+，表示匹配多个a</td></tr><tr><td>[abc]+</td><td>中括号加号组合，匹配中括号中的a或b或c，一次或者多次</td><td>也可以写成[a-c]+</td></tr><tr><td>?</td><td>问号，匹配前一个字符0次或者1次</td><td>a?，表示匹配0个a或最多1个a</td></tr><tr><td>|</td><td>竖杠，表示或者，同时过滤多个字符串</td><td>a|b|c</td></tr><tr><td>()</td><td>小括号，分组过滤，括号中的内容为一个整体</td><td>(？)</td></tr><tr><td>a{n,m}</td><td>表示匹配a字符最少n次，最多m次</td><td>任意字符+{最少值，最多值}</td></tr><tr><td>a{n,}</td><td>表示匹配a字符最少n次</td><td></td></tr><tr><td>a{,m}</td><td>表示匹配a字符最多m次</td><td></td></tr><tr><td>a{z}</td><td>表示匹配a字符正好z次</td><td></td></tr></tbody></table><blockquote><p>awk的功能主要是：</p><ol><li><p>将文件<code>逐行读入</code>；</p><ol start="2"><li>以空格、制表符(TAB键)为默认分隔符将每行<code>切片</code>；</li></ol></li><li><p>切开的部分再进行各种<code>分析</code>。</p></li></ol></blockquote><h2 id="grep命令"><a href="#grep命令" class="headerlink" title="grep命令"></a>grep命令</h2><blockquote><p>全拼:Global search REgular expression and Print out the line.</p><p>作用：文本搜索工具，根据用户指定的“模式（过滤条件）”对目标文本逐行匹配检查，打印匹配到的行</p><p>模式：由正则表达式的<code>元字符</code>及<code>文本字符</code>所编写的<code>过滤条件</code></p></blockquote><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grep [option] [pattern] &lt;file&gt;</span><br><span class="line"><span class="comment">#命令+选项+模式+操作文件</span></span><br></pre></td></tr></table></figure><h3 id="常见参数-option"><a href="#常见参数-option" class="headerlink" title="常见参数[option]"></a>常见参数[option]</h3><blockquote><p>-i忽略大小写<br>-o仅仅显示匹配到的字符串本身<br>-v显示不能被模式匹配到的行，相当于取反，即排除匹配的项<br>-E支持使用拓展正则表达式元字符<br>-q、–quiet、–slient静默模式，即不输出任何信息</p><p>-n显示匹配行的行号</p><p>-c统计匹配到的行数</p><p>–color&#x3D;auto</p><p>-w</p></blockquote><h3 id="grep命令之基本正则实践"><a href="#grep命令之基本正则实践" class="headerlink" title="grep命令之基本正则实践"></a>grep命令之基本正则实践</h3><p>准备文本文件REg.txt</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">I am studying REg.</span><br><span class="line">I like grep.</span><br><span class="line"></span><br><span class="line">My phone number is +86 123456789000</span><br><span class="line"></span><br><span class="line"><span class="comment">#我是注释</span></span><br><span class="line">aoooz</span><br><span class="line">aooz</span><br><span class="line">aoz</span><br><span class="line">az</span><br></pre></td></tr></table></figure><blockquote><p>^  尖角号，用于模式最左边，匹配以某字符串<code>开头</code>的行</p></blockquote><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">&gt; $ 美元符，用于模式最右边，匹配以某字符串`结尾`的行</span><br><span class="line"></span><br><span class="line">```bash</span><br></pre></td></tr></table></figure><p><code>TIPS:</code></p><p>在Linux平台下，所有文件内容行的结尾都有一个$</p><p>可以使用cat -A或者cat -En查看</p><blockquote><p>.  小数点，匹配任意一个<code>有且只有一个</code>字符，不能匹配空格</p></blockquote><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure><blockquote><p>* </p></blockquote><h3 id="grep命令之拓展正则实践"><a href="#grep命令之拓展正则实践" class="headerlink" title="grep命令之拓展正则实践"></a>grep命令之拓展正则实践</h3><h2 id="awk命令的选项"><a href="#awk命令的选项" class="headerlink" title="awk命令的选项"></a>awk命令的选项</h2><blockquote><p>-F </p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机编程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Shell </tag>
+            
+            <tag> Linux </tag>
+            
+            <tag> awk </tag>
+            
+            <tag> grep </tag>
+            
+            <tag> sed </tag>
+            
+            <tag> 正则表达式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>shell脚本学习Day7</title>
       <link href="/posts/2558606737/"/>
       <url>/posts/2558606737/</url>
@@ -255,41 +290,6 @@
             <tag> Linux </tag>
             
             <tag> Centos </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>正则表达式与Linux文本三剑客Day1</title>
-      <link href="/posts/946884611/"/>
-      <url>/posts/946884611/</url>
-      
-        <content type="html"><![CDATA[<h1 id="Linux文本三剑客"><a href="#Linux文本三剑客" class="headerlink" title="Linux文本三剑客"></a>Linux文本三剑客</h1><blockquote><p>文本处理工具均支持正则表达式引擎</p><ol><li>grep：文本过滤工具，通过模式pattern工具进行匹配</li><li>sed：文本编辑工具，stream editor 流编辑器</li><li>awk：Linux文本报告生成器（格式化文本）   本质是gawk，awk是软连接（快捷方式）</li></ol></blockquote><h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><h3 id="基本正则表达式BRE集合"><a href="#基本正则表达式BRE集合" class="headerlink" title="基本正则表达式BRE集合"></a>基本正则表达式BRE集合</h3><table><thead><tr><th align="left">字符</th><th>作用</th><th>举例&#x2F;说明</th></tr></thead><tbody><tr><td align="left">^</td><td>尖角号，用于模式最左边，匹配以某字符串<code>开头</code>的行</td><td>^apple，匹配以apple单词开头的行</td></tr><tr><td align="left">$</td><td>美元符，用于模式最右边，匹配以某字符串<code>结尾</code>的行</td><td>abc$，匹配以abc结尾的行</td></tr><tr><td align="left">^$</td><td>组合符，表示空行</td><td>匹配以空字符开头、空字符结尾的行，也就是空行</td></tr><tr><td align="left">.</td><td>小数点，匹配任意一个<code>有且只有一个</code>字符，不能匹配空格</td><td>一行有多个字符的情况呢？是算一个字符还是多个字符然后匹配其中一个？</td></tr><tr><td align="left">\</td><td>反斜杠，转义字符，用于还原字符原本的含义</td><td>“\.”，输出的结果是一个普通的小数点</td></tr><tr><td align="left">*</td><td>星号，匹配前一个字符<code>连续出现</code>0次或1次以上，重复0次代表空，即匹配所有内容</td><td>a*，表示匹配多个连续的a字符</td></tr><tr><td align="left">.*</td><td>组合符，匹配所有内容除了空行</td><td>.*，输出所有行的内容除了空行</td></tr><tr><td align="left">^.*</td><td>组合符，匹配任意多个字符<code>开头</code>的内容</td><td>挺奇怪的，有点抽象</td></tr><tr><td align="left">.*$</td><td>组合符，匹配任意多个字符<code>结尾</code>的内容</td><td>挺奇怪的，有点抽象x2</td></tr><tr><td align="left">[abc]</td><td>中括号，匹配中括号中的任意一个字符，a或b或c，也可以写成[a-c]</td><td>^[a-z]，用这个不就实现了匹配以任意小写字母开头的行嘛</td></tr><tr><td align="left">[^abc]</td><td>中括号内带尖角符，匹配<code>除了</code>中括号中的任意一个字符的其它字符</td><td>相当于对[abc]的结果取反嘛</td></tr></tbody></table><h3 id="拓展正则表达式ERE集合"><a href="#拓展正则表达式ERE集合" class="headerlink" title="拓展正则表达式ERE集合"></a>拓展正则表达式ERE集合</h3><blockquote><p>拓展正则必须使用grep -E 才能生效</p><p><code>TIPS:</code></p><p>egrep不推荐使用，使用grep -E代替</p><p>grep不加参数时，需要在特殊字符前加转义符\才能识别为正则表达式</p></blockquote><table><thead><tr><th>字符</th><th>作用</th><th>说明</th></tr></thead><tbody><tr><td>+</td><td>加号，匹配前一个字符一次或者多次</td><td>a+，表示匹配多个a</td></tr><tr><td>[abc]+</td><td>中括号加号组合，匹配中括号中的a或b或c，一次或者多次</td><td>也可以写成[a-c]+</td></tr><tr><td>?</td><td>问号，匹配前一个字符0次或者1次</td><td>a?，表示匹配0个a或最多1个a</td></tr><tr><td>|</td><td>竖杠，表示或者，同时过滤多个字符串</td><td>a|b|c</td></tr><tr><td>()</td><td>小括号，分组过滤，括号中的内容为一个整体</td><td>(？)</td></tr><tr><td>a{n,m}</td><td>表示匹配a字符最少n次，最多m次</td><td>任意字符+{最少值，最多值}</td></tr><tr><td>a{n,}</td><td>表示匹配a字符最少n次</td><td></td></tr><tr><td>a{,m}</td><td>表示匹配a字符最多m次</td><td></td></tr><tr><td>a{z}</td><td>表示匹配a字符正好z次</td><td></td></tr></tbody></table><blockquote><p>awk的功能主要是：</p><ol><li><p>将文件<code>逐行读入</code>；</p><ol start="2"><li>以空格、制表符(TAB键)为默认分隔符将每行<code>切片</code>；</li></ol></li><li><p>切开的部分再进行各种<code>分析</code>。</p></li></ol></blockquote><h2 id="grep命令"><a href="#grep命令" class="headerlink" title="grep命令"></a>grep命令</h2><blockquote><p>全拼:Global search REgular expression and Print out the line.</p><p>作用：文本搜索工具，根据用户指定的“模式（过滤条件）”对目标文本逐行匹配检查，打印匹配到的行</p><p>模式：由正则表达式的<code>元字符</code>及<code>文本字符</code>所编写的<code>过滤条件</code></p></blockquote><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grep [option] [pattern] &lt;file&gt;</span><br><span class="line"><span class="comment">#命令+选项+模式+操作文件</span></span><br></pre></td></tr></table></figure><h3 id="常见参数-option"><a href="#常见参数-option" class="headerlink" title="常见参数[option]"></a>常见参数[option]</h3><blockquote><p>-i忽略大小写<br>-o仅仅显示匹配到的字符串本身<br>-v显示不能被模式匹配到的行，相当于取反，即排除匹配的项<br>-E支持使用拓展正则表达式元字符<br>-q、–quiet、–slient静默模式，即不输出任何信息</p><p>-n显示匹配行的行号</p><p>-c统计匹配到的行数</p><p>–color&#x3D;auto</p><p>-w</p></blockquote><h3 id="grep命令之基本正则实践"><a href="#grep命令之基本正则实践" class="headerlink" title="grep命令之基本正则实践"></a>grep命令之基本正则实践</h3><p>准备文本文件REg.txt</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">I am studying REg.</span><br><span class="line">I like grep.</span><br><span class="line"></span><br><span class="line">My phone number is +86 123456789000</span><br><span class="line"></span><br><span class="line"><span class="comment">#我是注释</span></span><br><span class="line">aoooz</span><br><span class="line">aooz</span><br><span class="line">aoz</span><br><span class="line">az</span><br></pre></td></tr></table></figure><blockquote><p>^  尖角号，用于模式最左边，匹配以某字符串<code>开头</code>的行</p></blockquote><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">&gt; $ 美元符，用于模式最右边，匹配以某字符串`结尾`的行</span><br><span class="line"></span><br><span class="line">```bash</span><br></pre></td></tr></table></figure><p><code>TIPS:</code></p><p>在Linux平台下，所有文件内容行的结尾都有一个$</p><p>可以使用cat -A或者cat -En查看</p><blockquote><p>.  小数点，匹配任意一个<code>有且只有一个</code>字符，不能匹配空格</p></blockquote><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure><blockquote><p>* </p></blockquote><h3 id="grep命令之拓展正则实践"><a href="#grep命令之拓展正则实践" class="headerlink" title="grep命令之拓展正则实践"></a>grep命令之拓展正则实践</h3><h2 id="awk命令的选项"><a href="#awk命令的选项" class="headerlink" title="awk命令的选项"></a>awk命令的选项</h2><blockquote><p>-F </p></blockquote>]]></content>
-      
-      
-      <categories>
-          
-          <category> 计算机编程 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Shell </tag>
-            
-            <tag> Linux </tag>
-            
-            <tag> awk </tag>
-            
-            <tag> grep </tag>
-            
-            <tag> sed </tag>
-            
-            <tag> 正则表达式 </tag>
             
         </tags>
       
