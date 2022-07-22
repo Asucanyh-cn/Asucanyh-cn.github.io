@@ -1,4 +1,9 @@
-
+/*自定义字体-本地*/
+@font-face {
+  font-family: '方正喵呜体';
+  font-display: swap;
+  src: url('/css/方正喵呜体.ttf') format("truetype");
+}
 /* 页脚透明 */
 #footer{
   background: transparent!important;
