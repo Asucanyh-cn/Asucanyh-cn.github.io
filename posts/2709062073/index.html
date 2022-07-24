@@ -1,0 +1,533 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>正则表达式与Linux文本三剑客Day2 | Lptexas</title><meta name="keywords" content="Shell,Linux,awk,grep,sed,正则表达式"><meta name="author" content="Lptexas"><meta name="copyright" content="Lptexas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="续正则表达式与Linux文本三剑客Day1  sed命令sed的工作流语法1sed [option] [sed内置命令字符] [file]  选项1234567-n 取消默认sed的输出，常与sed内置命令p一起使用-i 直接修改结果写入文件，不用-i，sed修改的是内存数据-e 多次编辑，不需要管道符了-r 支持拓展正则，sed默认支持基本正则  sed内置命令字符sed的内置命令字符用于对文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式与Linux文本三剑客Day2">
+<meta property="og:url" content="http://asucanyh-cn.github.io/posts/2709062073/index.html">
+<meta property="og:site_name" content="Lptexas">
+<meta property="og:description" content="续正则表达式与Linux文本三剑客Day1  sed命令sed的工作流语法1sed [option] [sed内置命令字符] [file]  选项1234567-n 取消默认sed的输出，常与sed内置命令p一起使用-i 直接修改结果写入文件，不用-i，sed修改的是内存数据-e 多次编辑，不需要管道符了-r 支持拓展正则，sed默认支持基本正则  sed内置命令字符sed的内置命令字符用于对文">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://asucanyh-cn.github.io/img/post/gawr_guara_1.jpg">
+<meta property="article:published_time" content="2022-07-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-24T00:08:03.673Z">
+<meta property="article:author" content="Lptexas">
+<meta property="article:tag" content="Shell">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="awk">
+<meta property="article:tag" content="grep">
+<meta property="article:tag" content="sed">
+<meta property="article:tag" content="正则表达式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://asucanyh-cn.github.io/img/post/gawr_guara_1.jpg"><link rel="shortcut icon" href="/img/web-info/logo.jpg"><link rel="canonical" href="http://asucanyh-cn.github.io/posts/2709062073/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b555","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '正则表达式与Linux文本三剑客Day2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-24 08:08:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><!--include ./third-party/aplayer.pug--><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/beautifly.css"><link rel="stylesheet" href="/css/iconfont/iconfont.css"><link rel="stylesheet" href="/css/schedule_style.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/tzy13755126023/BLOG_SOURCE/css/function.min.css"><script src="/js/banf12.js"></script><script>var _hmt = _hmt || [];(function(){var hm = document.createElement("script");hm.src ="https://hm.baidu.com/hm.js?620b197f0a8f640c45f35a49041e7c3e";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/web-info/avator.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/schedule/"><i class="fa-fw fa fa-calendar"></i><span> 计划</span></a></li><li><a class="site-page child" href="/images/"><i class="fa-fw fas fa-images"></i><span> 图库</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/post/gawr_gura_1.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Lptexas</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/schedule/"><i class="fa-fw fa fa-calendar"></i><span> 计划</span></a></li><li><a class="site-page child" href="/images/"><i class="fa-fw fas fa-images"></i><span> 图库</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">正则表达式与Linux文本三剑客Day2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-22T16:00:00.000Z" title="发表于 2022-07-23 00:00:00">2022-07-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-24T00:08:03.673Z" title="更新于 2022-07-24 08:08:03">2022-07-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BC%96%E7%A8%8B/">计算机编程</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>13分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="正则表达式与Linux文本三剑客Day2"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>续<a href="https://asucanyh-cn.github.io/posts/946884611/">正则表达式与Linux文本三剑客Day1</a></p>
+</blockquote>
+<h1 id="sed命令"><a href="#sed命令" class="headerlink" title="sed命令"></a>sed命令</h1><h2 id="sed的工作流"><a href="#sed的工作流" class="headerlink" title="sed的工作流"></a>sed的工作流</h2><h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed [option] [sed内置命令字符] [file]</span><br></pre></td></tr></table></figure>
+
+<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-n 取消默认sed的输出，常与sed内置命令p一起使用</span><br><span class="line"></span><br><span class="line">-i 直接修改结果写入文件，不用-i，sed修改的是内存数据</span><br><span class="line"></span><br><span class="line">-e 多次编辑，不需要管道符了</span><br><span class="line"></span><br><span class="line">-r 支持拓展正则，sed默认支持基本正则</span><br></pre></td></tr></table></figure>
+
+<h2 id="sed内置命令字符"><a href="#sed内置命令字符" class="headerlink" title="sed内置命令字符"></a>sed内置命令字符</h2><p>sed的内置命令字符用于对文件进行不同的操作功能，如对文件增删改查</p>
+<table>
+<thead>
+<tr>
+<th>sed的内置命令字符</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>append，对文本追加，在指定行后面添加一行&#x2F;多行文本</td>
+</tr>
+<tr>
+<td>d</td>
+<td>Delete，删除匹配行</td>
+</tr>
+<tr>
+<td>i</td>
+<td>insert，插入文本，在指定行前添加一行&#x2F;多行文本</td>
+</tr>
+<tr>
+<td>p</td>
+<td>print，打印匹配行的内容，通常与-n参数一起使用</td>
+</tr>
+<tr>
+<td>s&#x2F;正则&#x2F;替换内容&#x2F;g或者s#正则#替换内容#g或者s@正则@替换内容@g</td>
+<td>匹配正则内容，然后替换内容（支持正则），结尾g代表全局匹配</td>
+</tr>
+</tbody></table>
+<h2 id="匹配范围"><a href="#匹配范围" class="headerlink" title="匹配范围"></a>匹配范围</h2><table>
+<thead>
+<tr>
+<th>范围</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>空地址</td>
+<td>全文处理，如：使用a时不指定行，则会在每一行后添加内容</td>
+</tr>
+<tr>
+<td>单地址</td>
+<td>指定文件某一行，如：1a，在第一行后添加内容</td>
+</tr>
+<tr>
+<td>&#x2F;pattern&#x2F;</td>
+<td>被模式匹配到的每一行</td>
+</tr>
+<tr>
+<td>范围区间</td>
+<td>10,20 十到二十行 ；10,+5第10行向下5行 ；&#x2F;pattern1&#x2F;,&#x2F;pattern2&#x2F;匹配多个模式</td>
+</tr>
+<tr>
+<td>步长</td>
+<td>1~2表示1,3,5,7,9…奇数行；2~2两个步长表示2,4,6,8…偶数行</td>
+</tr>
+</tbody></table>
+<h2 id="内置命令实践"><a href="#内置命令实践" class="headerlink" title="内置命令实践"></a>内置命令实践</h2><blockquote>
+<p>准备数据文件sed.txt</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="配合正则表达实践"><a href="#配合正则表达实践" class="headerlink" title="配合正则表达实践"></a>配合正则表达实践</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line"><span class="comment"># awk命令</span></span><br><span class="line"></span><br><span class="line">&gt; awk是一个强大的Linux命令，有强大的文本格式化能力，好比将一些文本数据格式化成excel表的样式。</span><br><span class="line">&gt;</span><br><span class="line">&gt; 也是一行一行处理</span><br><span class="line"></span><br><span class="line">1. awk默认以`空格`为分隔符，且多个空格识别为一个空格作为分隔符</span><br><span class="line">2. awk是按行处理文件，一行处理完毕，处理下一行，根据用户指定的分隔符去工作，没有指定则默认空格</span><br><span class="line">3. 指定了分隔符后，awk把每一行切割后的数据对应到内置变量</span><br><span class="line"></span><br><span class="line">&gt; awk早期在Unix上实现，awk是gawk，GUN awk的意思；</span><br><span class="line"></span><br><span class="line">&gt;awk更是一门编程语言，支持条件判断、数组、循环等功能。</span><br><span class="line"></span><br><span class="line"><span class="comment">## 语法</span></span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">awk [option] <span class="string">&#x27;pattern&#123;action&#125;&#x27;</span> file ...</span><br><span class="line"><span class="comment">#awk+awk可选参数、选项+模式&#123;动作&#125;+文件/数据</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>最常用的action是：print&#x2F;printf，即打印</li>
+</ul>
+<h2 id="选项-1"><a href="#选项-1" class="headerlink" title="选项"></a>选项</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-F 指定分割字段符</span><br><span class="line">-v 定义或修改一个awk内部的变量</span><br><span class="line">-f 从脚本文件中读取awk命令</span><br></pre></td></tr></table></figure>
+
+<h2 id="awk内置变量"><a href="#awk内置变量" class="headerlink" title="awk内置变量"></a>awk内置变量</h2><blockquote>
+<p>awk ‘{print $2}’，没有使用参数和模式时，<code>$2</code>表示输出文本的<code>第二列</code>信息。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$0</span> 代表一整行</span><br><span class="line"><span class="variable">$1</span> <span class="variable">$2</span> <span class="variable">$3</span> ... 代表第一列第二列第三列...（第一个字段、第二个、第三个.....）</span><br><span class="line"></span><br><span class="line"><span class="variable">$NF</span> 代表最后一列（最后一个字段）</span><br><span class="line">$(NF-1) 代表倒数第二列（倒数第二个字段）</span><br><span class="line">FS 字段分隔符，默认是空格</span><br><span class="line">NF（Number of fields） 分割后，当前行一共有多少个字段</span><br><span class="line">NR（Number of records） 当前记录数、行数</span><br><span class="line"><span class="comment">#更多内置变量可以通过man手册查看 </span></span><br><span class="line">man awk</span><br></pre></td></tr></table></figure>
+
+<p>想要输入第一列第二列第三列时，$1$2$3用<code>逗号</code>隔开，输出的结果就不会挨在一起而是有默认空格分隔。</p>
+<p>awk自定义输出内容在单引号中使用双引号括起来，如:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print &quot;第一列：&quot;$1,&quot;第二列：&quot;$2&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h2><h3 id="准备文件awk1-txt"><a href="#准备文件awk1-txt" class="headerlink" title="准备文件awk1.txt"></a>准备文件awk1.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a1 a2 a3 a4</span><br><span class="line">b1 b2 b3 b4</span><br><span class="line">c1 c2 c3 c4</span><br><span class="line">d1 d2 d3 d4</span><br></pre></td></tr></table></figure>
+
+<h3 id="显示文件第五行"><a href="#显示文件第五行" class="headerlink" title="显示文件第五行"></a>显示文件第五行</h3><blockquote>
+<p>NR&#x3D;&#x3D;5</p>
+<p><code>=</code>在Linux表示修改变量值，<code>==</code>表示关系运算符</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;NR==5&#123;print $0&#125;&#x27;</span> awk1.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="显示文件第二行到第六行"><a href="#显示文件第二行到第六行" class="headerlink" title="显示文件第二行到第六行"></a>显示文件第二行到第六行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;NR==2,NR==6&#123;print $0&#125;&#x27;</span> awk1.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="为文件每一行添加行号"><a href="#为文件每一行添加行号" class="headerlink" title="为文件每一行添加行号"></a>为文件每一行添加行号</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print NR,$0&#125;&#x27;</span> awk1.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="显示文件第一列、倒数第三列、最后一列"><a href="#显示文件第一列、倒数第三列、最后一列" class="headerlink" title="显示文件第一列、倒数第三列、最后一列"></a>显示文件第一列、倒数第三列、最后一列</h3><blockquote>
+<p>NF</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print $1,$(NF-2),$NF&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用awk取出ip地址"><a href="#使用awk取出ip地址" class="headerlink" title="使用awk取出ip地址"></a>使用awk取出ip地址</h3><blockquote>
+<p>利用awk以空格为分隔符的特性</p>
+<p>ipconfig eth0</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ipconfig eth0|awk <span class="string">&#x27;NR==2&#123;print $2&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="替换空格为其他分隔符"><a href="#替换空格为其他分隔符" class="headerlink" title="替换空格为其他分隔符"></a>替换空格为其他分隔符</h3><h4 id="准备文件awk2-txt"><a href="#准备文件awk2-txt" class="headerlink" title="准备文件awk2.txt"></a>准备文件awk2.txt</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a:b:c:d</span><br><span class="line">1:2:3:4</span><br><span class="line">x:x:x:x</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>awk的分隔符有两种</p>
+<ul>
+<li>输入分隔符，awk默认是空格、空白字符，英文是field separator,变量名为FS</li>
+<li>输出分隔符，output field separator，简称OFS</li>
+</ul>
+</blockquote>
+<h4 id="FS输入分隔符"><a href="#FS输入分隔符" class="headerlink" title="FS输入分隔符"></a>FS输入分隔符</h4><blockquote>
+<p>使用参数可以指定分隔符</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-F “&lt;分隔符&gt;”</span><br></pre></td></tr></table></figure>
+
+<h5 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h5><blockquote>
+<p>输出第一列和最后一列</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -F <span class="string">&quot;:&quot;</span> <span class="string">&#x27;&#123;print $1,$NF&#125;&#x27;</span> awk2.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>通过<code>修改awk内置变量</code>分隔符来实现指定分隔符</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-v FS=“&lt;分隔符&gt;”</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># cat awk2.txt</span></span><br><span class="line">a:b:c:d</span><br><span class="line">1:2:3:4</span><br><span class="line">x:x:x:x</span><br><span class="line">[root@localhost ~]<span class="comment"># awk -F &quot;:&quot; &#x27;&#123;print $1,$NF&#125;&#x27; awk2.txt</span></span><br><span class="line">a d</span><br><span class="line">1 4</span><br><span class="line">x x</span><br></pre></td></tr></table></figure>
+
+<h5 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h5><blockquote>
+<p>输出第二列和倒数第二列</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -v FS=<span class="string">&quot;:&quot;</span> <span class="string">&#x27;&#123;print $2,$(NF-1)&#125;&#x27;</span> awk2.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># cat awk2.txt</span></span><br><span class="line">a:b:c:d</span><br><span class="line">1:2:3:4</span><br><span class="line">x:x:x:x</span><br><span class="line">[root@localhost ~]<span class="comment"># awk -v FS=&quot;:&quot; &#x27;&#123;print $2,$(NF-1)&#125;&#x27; awk2.txt</span></span><br><span class="line">b c</span><br><span class="line">2 3</span><br><span class="line">x x</span><br></pre></td></tr></table></figure>
+
+<h4 id="OFS输出分隔符"><a href="#OFS输出分隔符" class="headerlink" title="OFS输出分隔符"></a>OFS输出分隔符</h4><blockquote>
+<p>当我们在输出使用<code>逗号</code>时，默认使用空格分割</p>
+<p>awk -F “:” ‘{print $1,$2,$3,$4}’ awk2.txt</p>
+<p>如果需要修改<code>逗号</code>的默认输出分隔符，我们可以<code>修改OFS变量</code></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -F <span class="string">&quot;:&quot;</span> -v OFS=<span class="string">&quot;---&quot;</span> <span class="string">&#x27;&#123;print $1,$2,$3,$4&#125;&#x27;</span> awk2.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># awk -F &quot;:&quot;  &#x27;&#123;print $1,$2,$3,$4&#125;&#x27; awk2.txt</span></span><br><span class="line">a b c d</span><br><span class="line">1 2 3 4</span><br><span class="line">x x x x</span><br><span class="line">[root@localhost ~]<span class="comment"># cat awk2.txt</span></span><br><span class="line">a:b:c:d</span><br><span class="line">1:2:3:4</span><br><span class="line">x:x:x:x</span><br><span class="line">[root@localhost ~]<span class="comment"># awk -F &quot;:&quot; -v OFS=&quot;---&quot; &#x27;&#123;print $1,$2,$3,$4&#125;&#x27; awk2.txt</span></span><br><span class="line">a---b---c---d</span><br><span class="line">1---2---3---4</span><br><span class="line">x---x---x---x</span><br></pre></td></tr></table></figure>
+
+<h2 id="awk内置命令补充"><a href="#awk内置命令补充" class="headerlink" title="awk内置命令补充"></a>awk内置命令补充</h2><blockquote>
+<p>awk变量分为</p>
+<ul>
+<li>内置变量</li>
+<li>自定义变量</li>
+</ul>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">RS 输入记录分隔符（输入换行符），指定输入时的换行符</span><br><span class="line">ORS 输出记录分隔符（输出换行符），指定输出时的换行符</span><br><span class="line">FNR 各文件分别技术的行号</span><br><span class="line">FILENAME 当前文件名</span><br><span class="line">ARGC 命令行参数的个数</span><br><span class="line">ARGV 数组，保存的是命令行所给定的各参数</span><br></pre></td></tr></table></figure>
+
+<h2 id="实践-1"><a href="#实践-1" class="headerlink" title="实践"></a>实践</h2><h3 id="处理多个文件显示行号"><a href="#处理多个文件显示行号" class="headerlink" title="处理多个文件显示行号"></a>处理多个文件显示行号</h3><blockquote>
+<p>当作整体的情况</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print NR,$0&#125;&#x27;</span> awk1.txt awk2.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>执行演示</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># cat awk1.txt</span></span><br><span class="line">a1 a2 a3 a4</span><br><span class="line">b1 b2 b3 b4</span><br><span class="line">c1 c2 c3 c4</span><br><span class="line">d1 d2 d3 d4</span><br><span class="line">[root@localhost ~]<span class="comment"># cat awk2.txt</span></span><br><span class="line">a:b:c:d</span><br><span class="line">1:2:3:4</span><br><span class="line">x:x:x:x</span><br><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;&#123;print NR,$0&#125;&#x27; awk1.txt awk2.txt</span></span><br><span class="line">1 a1 a2 a3 a4</span><br><span class="line">2 b1 b2 b3 b4</span><br><span class="line">3 c1 c2 c3 c4</span><br><span class="line">4 d1 d2 d3 d4</span><br><span class="line">5 a:b:c:d</span><br><span class="line">6 1:2:3:4</span><br><span class="line">7 x:x:x:x</span><br></pre></td></tr></table></figure>
+
+<h3 id="RS-更换输入换行分隔符"><a href="#RS-更换输入换行分隔符" class="headerlink" title="RS 更换输入换行分隔符"></a>RS 更换输入换行分隔符</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -v RS=<span class="string">&quot; &quot;</span> &#123;<span class="built_in">print</span> <span class="variable">$0</span>&#125; awk1.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># cat awk1.txt</span></span><br><span class="line">a1 a2 a3 a4</span><br><span class="line">b1 b2 b3 b4</span><br><span class="line">c1 c2 c3 c4</span><br><span class="line">d1 d2 d3 d4</span><br><span class="line">[root@localhost ~]<span class="comment"># awk -v RS=&quot; &quot;  &#x27;&#123;print $0&#125;&#x27; awk1.txt</span></span><br><span class="line">a1</span><br><span class="line">a2</span><br><span class="line">a3</span><br><span class="line">a4</span><br><span class="line">b1</span><br><span class="line">b2</span><br><span class="line">b3</span><br><span class="line">b4</span><br><span class="line">c1</span><br><span class="line">c2</span><br><span class="line">c3</span><br><span class="line">c4</span><br><span class="line">d1</span><br><span class="line">d2</span><br><span class="line">d3</span><br><span class="line">d4</span><br></pre></td></tr></table></figure>
+
+<h3 id="ORS-更换输出换行分隔符"><a href="#ORS-更换输出换行分隔符" class="headerlink" title="ORS 更换输出换行分隔符"></a>ORS 更换输出换行分隔符</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -v ORS=<span class="string">&quot; &quot;</span> <span class="string">&#x27;&#123;print $0&#125;&#x27;</span> awk1.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;&#123;print $0&#125;&#x27; awk1.txt</span></span><br><span class="line">a1 a2 a3 a4</span><br><span class="line">b1 b2 b3 b4</span><br><span class="line">c1 c2 c3 c4</span><br><span class="line">d1 d2 d3 d4</span><br><span class="line">[root@localhost ~]<span class="comment"># awk -v ORS=&quot; &quot; &#x27;&#123;print $0&#125;&#x27; awk1.txt</span></span><br><span class="line">a1 a2 a3 a4 b1 b2 b3 b4 c1 c2 c3 c4 d1 d2 d3 d4 [root@localhost ~]<span class="comment">#</span></span><br><span class="line">[root@localhost ~]<span class="comment"># awk -v ORS=&quot;换行符&quot; &#x27;&#123;print $0&#125;&#x27; awk1.txt</span></span><br><span class="line">a1 a2 a3 a4换行符b1 b2 b3 b4换行符c1 c2 c3 c4换行符d1 d2 d3 d4换行符[root@localhost ~]<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="数组ARGV变量的使用"><a href="#数组ARGV变量的使用" class="headerlink" title="数组ARGV变量的使用"></a>数组ARGV变量的使用</h3><blockquote>
+<p>BEGIN 模式，表示做什么事前先做什么事</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;BEGIN&#123;print &quot;这句话先做!&quot;&#125; &#123;print $0&#125;&#x27;</span> awk1.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>ARGV</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;BEGIN&#123;print &quot;这句话先做!&quot;&#125; &#123;print ARGV[0],$0&#125;&#x27;</span> awk1.txt</span><br><span class="line">awk <span class="string">&#x27;BEGIN&#123;print &quot;这句话先做!&quot;&#125; &#123;print ARGV[1],$0&#125;&#x27;</span> awk1.txt</span><br><span class="line">awk <span class="string">&#x27;BEGIN&#123;print &quot;这句话先做!&quot;&#125; &#123;print ARGV[2],$0&#125;&#x27;</span> awk1.txt</span><br><span class="line">awk <span class="string">&#x27;BEGIN&#123;print &quot;这句话先做!&quot;&#125; &#123;print ARGV[3],$0&#125;&#x27;</span> awk1.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;BEGIN&#123;print &quot;这句话先做&quot;&#125; &#123;print $0&#125;&#x27; awk1.txt</span></span><br><span class="line">这句话先做</span><br><span class="line">a1 a2 a3 a4</span><br><span class="line">b1 b2 b3 b4</span><br><span class="line">c1 c2 c3 c4</span><br><span class="line">d1 d2 d3 d4</span><br><span class="line"><span class="comment">########</span></span><br><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;BEGIN&#123;print &quot;这句话先做!&quot;&#125; &#123;print ARGV[0],$0&#125;&#x27; awk1.txt这句话先做!</span></span><br><span class="line">awk a1 a2 a3 a4</span><br><span class="line">awk b1 b2 b3 b4</span><br><span class="line">awk c1 c2 c3 c4</span><br><span class="line">awk d1 d2 d3 d4</span><br><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;BEGIN&#123;print &quot;这句话先做!&quot;&#125; &#123;print ARGV[1],$0&#125;&#x27; awk1.txt这句话先做!</span></span><br><span class="line">awk1.txt a1 a2 a3 a4</span><br><span class="line">awk1.txt b1 b2 b3 b4</span><br><span class="line">awk1.txt c1 c2 c3 c4</span><br><span class="line">awk1.txt d1 d2 d3 d4</span><br><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;BEGIN&#123;print &quot;这句话先做!&quot;&#125; &#123;print ARGV[2],$0&#125;&#x27; awk1.txt这句话先做!</span></span><br><span class="line"> a1 a2 a3 a4</span><br><span class="line"> b1 b2 b3 b4</span><br><span class="line"> c1 c2 c3 c4</span><br><span class="line"> d1 d2 d3 d4</span><br><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;BEGIN&#123;print &quot;这句话先做!&quot;&#125; &#123;print ARGV[3],$0&#125;&#x27; awk1.txt这句话先做!</span></span><br><span class="line"> a1 a2 a3 a4</span><br><span class="line"> b1 b2 b3 b4</span><br><span class="line"> c1 c2 c3 c4</span><br><span class="line"> d1 d2 d3 d4</span><br></pre></td></tr></table></figure>
+
+<p>从上面的结果我们可以看出数组ARGV[0],ARGV[1]分别存储的是命令awk，文件名awk1.txt</p>
+<p>再通过一条命令就可以理解ARGV[]数组了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print ARGV[0],ARGV[1],ARGV[2]&#125;&#x27;</span> awk1.txt awk2.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;&#123;print ARGV[0],ARGV[1],ARGV[2]&#125;&#x27; awk1.txt awk2.txt</span></span><br><span class="line">awk awk1.txt awk2.txt</span><br><span class="line">awk awk1.txt awk2.txt</span><br><span class="line">awk awk1.txt awk2.txt</span><br><span class="line">awk awk1.txt awk2.txt</span><br><span class="line">awk awk1.txt awk2.txt</span><br><span class="line">awk awk1.txt awk2.txt</span><br><span class="line">awk awk1.txt awk2.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="awk自定义变量"><a href="#awk自定义变量" class="headerlink" title="awk自定义变量"></a>awk自定义变量</h3><h4 id="方法一-在awk中使用-v定义"><a href="#方法一-在awk中使用-v定义" class="headerlink" title="方法一 在awk中使用-v定义"></a>方法一 在awk中使用-v定义</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -v var=<span class="string">&quot;这是一个变量&quot;</span> <span class="string">&#x27;&#123;print var,$1&#125;&#x27;</span> awk2.txt</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法二-在程序中直接定义-两种写法"><a href="#方法二-在程序中直接定义-两种写法" class="headerlink" title="方法二 在程序中直接定义(两种写法)"></a>方法二 在程序中直接定义(两种写法)</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# awk &#x27;&#123;var1=&quot;变量1&quot;;var2=&quot;变量2&quot;;print var1,var2,$0&#125;&#x27; awk1.txt</span><br><span class="line">变量1 变量2 a1 a2 a3 a4</span><br><span class="line">变量1 变量2 b1 b2 b3 b4</span><br><span class="line">变量1 变量2 c1 c2 c3 c4</span><br><span class="line">变量1 变量2 d1 d2 d3 d4</span><br><span class="line">[root@localhost ~]# awk &#x27;&#123;var1=&quot;变量1&quot;;var2=&quot;变量2&quot;&#125;&#123;print var1,var2,$0&#125;&#x27; awk1.txt</span><br><span class="line">变量1 变量2 a1 a2 a3 a4</span><br><span class="line">变量1 变量2 b1 b2 b3 b4</span><br><span class="line">变量1 变量2 c1 c2 c3 c4</span><br><span class="line">变量1 变量2 d1 d2 d3 d4</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法三-间接引用shell变量-必须加BEGIN动作"><a href="#方法三-间接引用shell变量-必须加BEGIN动作" class="headerlink" title="方法三 间接引用shell变量(必须加BEGIN动作)"></a>方法三 间接引用shell变量(必须加<code>BEGIN</code>动作)</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var=变量</span><br><span class="line">awk -v var=<span class="variable">$var</span> <span class="string">&#x27;BEGIN&#123;print var&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="格式化"><a href="#格式化" class="headerlink" title="格式化"></a>格式化</h2><blockquote>
+<p>print只能简单的输出文本，并不能<code>美化或者</code>或者<code>修改格式</code></p>
+</blockquote>
+<h2 id="prinf格式化输出"><a href="#prinf格式化输出" class="headerlink" title="prinf格式化输出"></a>prinf格式化输出</h2><blockquote>
+<p>printf与print的区别</p>
+</blockquote>
+<ol>
+<li>printf需要指定format</li>
+<li>format用于指定后面的每个item的输出格式</li>
+<li>printf语句不会自动打印换行符</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print $0&#125;&#x27;</span> awk1.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;printf $0&#125;&#x27;</span> awk1.txt</span><br><span class="line"><span class="comment">#####</span></span><br><span class="line">awk <span class="string">&#x27;&#123;print $0&#125;&#x27;</span> awk1.txt</span><br><span class="line">awk <span class="string">&#x27;&#123;printf &quot;%s\n&quot;,$0&#125;&#x27;</span> awk1.txt</span><br></pre></td></tr></table></figure>
+
+<p>执行演示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;&#123;print $0&#125;&#x27; awk1.txt</span></span><br><span class="line">a1 a2 a3 a4</span><br><span class="line">b1 b2 b3 b4</span><br><span class="line">c1 c2 c3 c4</span><br><span class="line">d1 d2 d3 d4</span><br><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;&#123;printf $0&#125;&#x27; awk1.txt</span></span><br><span class="line">a1 a2 a3 a4b1 b2 b3 b4c1 c2 c3 c4d1 d2 d3 d4[root@localhost ~]<span class="comment">#</span></span><br><span class="line"><span class="comment">##########</span></span><br><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;&#123;print $0&#125;&#x27; awk1.txt</span></span><br><span class="line">a1 a2 a3 a4</span><br><span class="line">b1 b2 b3 b4</span><br><span class="line">c1 c2 c3 c4</span><br><span class="line">d1 d2 d3 d4</span><br><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;&#123;printf &quot;%s\n&quot;,$0&#125;&#x27; awk1.txt</span></span><br><span class="line">a1 a2 a3 a4</span><br><span class="line">b1 b2 b3 b4</span><br><span class="line">c1 c2 c3 c4</span><br><span class="line">d1 d2 d3 d4</span><br></pre></td></tr></table></figure>
+
+<p>使用%s\n可以实现print的换行</p>
+<h2 id="format的使用"><a href="#format的使用" class="headerlink" title="format的使用"></a>format的使用</h2><blockquote>
+<p>format格式的指示符都以%开头，后面跟一个字符</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">%c 显示字符的ASCII码</span><br><span class="line">%d，%i 匹配十进制整数</span><br><span class="line">%e，%E 科学计数显示数值</span><br><span class="line">%f 显示浮点数</span><br><span class="line">%g，%G 以科学计数法的格式或浮点数的格式显示数值</span><br><span class="line">%s 匹配字符串</span><br><span class="line">%v 无字符整数</span><br><span class="line">%% 显示%本身</span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>修饰符</span><br><span class="line">- 左对齐，默认是右对齐</span><br><span class="line">+ 显示数值符号，<span class="built_in">printf</span> <span class="string">&quot;%+d&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="针对多个变量进行格式化"><a href="#针对多个变量进行格式化" class="headerlink" title="针对多个变量进行格式化"></a>针对多个变量进行格式化</h2><blockquote>
+<p>Linux中使用printf命令格式化字符</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span> <span class="string">&quot;%s&quot;</span> a,b,c,d</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># printf &quot;%d\n&quot; 1 2 3</span></span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>awk中使用printf格式化字符</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;BEGIN&#123;printf &quot;%d\n&quot;,1,2,3&#125;&#x27;</span> </span><br><span class="line">awk <span class="string">&#x27;BEGIN&#123;printf &quot;%d\n%d\n%d\n&quot;,1,2,3&#125;&#x27;</span> </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;BEGIN&#123;printf &quot;%d\n&quot;,1,2,3&#125;&#x27;</span></span><br><span class="line">1</span><br><span class="line">[root@localhost ~]<span class="comment"># awk &#x27;BEGIN&#123;printf &quot;%d\n%d\n%d\n&quot;,1,2,3&#125;&#x27;</span></span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://asucanyh-cn.github.io">Lptexas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://asucanyh-cn.github.io/posts/2709062073/">http://asucanyh-cn.github.io/posts/2709062073/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://asucanyh-cn.github.io" target="_blank">Lptexas</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Shell/">Shell</a><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/awk/">awk</a><a class="post-meta__tags" href="/tags/grep/">grep</a><a class="post-meta__tags" href="/tags/sed/">sed</a><a class="post-meta__tags" href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">正则表达式</a></div><div class="post_share"><div class="social-share" data-image="/img/post/gawr_guara_1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/wechat.jpg" alt="Wechat"/></a><div class="post-qr-code-desc">Wechat</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/alipay.jpg" alt="Alipay"/></a><div class="post-qr-code-desc">Alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/4116585224/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/shell.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hexo自动部署脚本</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/946884611/" title="正则表达式与Linux文本三剑客Day1"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/gawr_guara_1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-13</div><div class="title">正则表达式与Linux文本三剑客Day1</div></div></a></div><div><a href="/posts/4116585224/" title="Hexo自动部署脚本"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/shell.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-22</div><div class="title">Hexo自动部署脚本</div></div></a></div><div><a href="/posts/188891481/" title="Shell脚本学习 Day1"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/gawr_gura1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-13</div><div class="title">Shell脚本学习 Day1</div></div></a></div><div><a href="/posts/2454393059/" title="Shell脚本学习 Day2"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/gawr_gura2.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-14</div><div class="title">Shell脚本学习 Day2</div></div></a></div><div><a href="/posts/3846971509/" title="Shell脚本学习 Day3"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/gawr_gura3.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-15</div><div class="title">Shell脚本学习 Day3</div></div></a></div><div><a href="/posts/2066265558/" title="Shell脚本学习 Day4"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/gawr_gura4.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-16</div><div class="title">Shell脚本学习 Day4</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/web-info/avator.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Lptexas</div><div class="author-info__description">运维学习ing</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Asucanyh-cn"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://qm.qq.com/cgi-bin/qm/qr?k=KdVlnsIni7_hzcBCaK58Eydx9x3gt2CF&amp;noverify=0" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://www.zhihu.com/people/ashbell" target="_blank" title="知乎"><i class="iconfont icon-zhihu-circle-fill"></i></a><a class="social-icon" href="mailto:Asucanyh@outlook.com" target="_blank" title="Email"><i class="fa fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">A <br> 所有外链使用Github.io域名</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sed%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">sed命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#sed%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">1.1.</span> <span class="toc-text">sed的工作流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E9%A1%B9"><span class="toc-number">1.3.</span> <span class="toc-text">选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sed%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4%E5%AD%97%E7%AC%A6"><span class="toc-number">1.4.</span> <span class="toc-text">sed内置命令字符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%B9%E9%85%8D%E8%8C%83%E5%9B%B4"><span class="toc-number">1.5.</span> <span class="toc-text">匹配范围</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4%E5%AE%9E%E8%B7%B5"><span class="toc-number">1.6.</span> <span class="toc-text">内置命令实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E5%90%88%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%AE%9E%E8%B7%B5"><span class="toc-number">1.7.</span> <span class="toc-text">配合正则表达实践</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E9%A1%B9-1"><span class="toc-number">1.8.</span> <span class="toc-text">选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk%E5%86%85%E7%BD%AE%E5%8F%98%E9%87%8F"><span class="toc-number">1.9.</span> <span class="toc-text">awk内置变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5"><span class="toc-number">1.10.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E6%96%87%E4%BB%B6awk1-txt"><span class="toc-number">1.10.1.</span> <span class="toc-text">准备文件awk1.txt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%BE%E7%A4%BA%E6%96%87%E4%BB%B6%E7%AC%AC%E4%BA%94%E8%A1%8C"><span class="toc-number">1.10.2.</span> <span class="toc-text">显示文件第五行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%BE%E7%A4%BA%E6%96%87%E4%BB%B6%E7%AC%AC%E4%BA%8C%E8%A1%8C%E5%88%B0%E7%AC%AC%E5%85%AD%E8%A1%8C"><span class="toc-number">1.10.3.</span> <span class="toc-text">显示文件第二行到第六行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E6%96%87%E4%BB%B6%E6%AF%8F%E4%B8%80%E8%A1%8C%E6%B7%BB%E5%8A%A0%E8%A1%8C%E5%8F%B7"><span class="toc-number">1.10.4.</span> <span class="toc-text">为文件每一行添加行号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%98%BE%E7%A4%BA%E6%96%87%E4%BB%B6%E7%AC%AC%E4%B8%80%E5%88%97%E3%80%81%E5%80%92%E6%95%B0%E7%AC%AC%E4%B8%89%E5%88%97%E3%80%81%E6%9C%80%E5%90%8E%E4%B8%80%E5%88%97"><span class="toc-number">1.10.5.</span> <span class="toc-text">显示文件第一列、倒数第三列、最后一列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8awk%E5%8F%96%E5%87%BAip%E5%9C%B0%E5%9D%80"><span class="toc-number">1.10.6.</span> <span class="toc-text">使用awk取出ip地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC%E4%B8%BA%E5%85%B6%E4%BB%96%E5%88%86%E9%9A%94%E7%AC%A6"><span class="toc-number">1.10.7.</span> <span class="toc-text">替换空格为其他分隔符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E6%96%87%E4%BB%B6awk2-txt"><span class="toc-number">1.10.7.1.</span> <span class="toc-text">准备文件awk2.txt</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FS%E8%BE%93%E5%85%A5%E5%88%86%E9%9A%94%E7%AC%A6"><span class="toc-number">1.10.7.2.</span> <span class="toc-text">FS输入分隔符</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.10.7.2.1.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-1"><span class="toc-number">1.10.7.2.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#OFS%E8%BE%93%E5%87%BA%E5%88%86%E9%9A%94%E7%AC%A6"><span class="toc-number">1.10.7.3.</span> <span class="toc-text">OFS输出分隔符</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#awk%E5%86%85%E7%BD%AE%E5%91%BD%E4%BB%A4%E8%A1%A5%E5%85%85"><span class="toc-number">1.11.</span> <span class="toc-text">awk内置命令补充</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E8%B7%B5-1"><span class="toc-number">1.12.</span> <span class="toc-text">实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E5%A4%9A%E4%B8%AA%E6%96%87%E4%BB%B6%E6%98%BE%E7%A4%BA%E8%A1%8C%E5%8F%B7"><span class="toc-number">1.12.1.</span> <span class="toc-text">处理多个文件显示行号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RS-%E6%9B%B4%E6%8D%A2%E8%BE%93%E5%85%A5%E6%8D%A2%E8%A1%8C%E5%88%86%E9%9A%94%E7%AC%A6"><span class="toc-number">1.12.2.</span> <span class="toc-text">RS 更换输入换行分隔符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ORS-%E6%9B%B4%E6%8D%A2%E8%BE%93%E5%87%BA%E6%8D%A2%E8%A1%8C%E5%88%86%E9%9A%94%E7%AC%A6"><span class="toc-number">1.12.3.</span> <span class="toc-text">ORS 更换输出换行分隔符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E7%BB%84ARGV%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.12.4.</span> <span class="toc-text">数组ARGV变量的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#awk%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="toc-number">1.12.5.</span> <span class="toc-text">awk自定义变量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80-%E5%9C%A8awk%E4%B8%AD%E4%BD%BF%E7%94%A8-v%E5%AE%9A%E4%B9%89"><span class="toc-number">1.12.5.1.</span> <span class="toc-text">方法一 在awk中使用-v定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C-%E5%9C%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9B%B4%E6%8E%A5%E5%AE%9A%E4%B9%89-%E4%B8%A4%E7%A7%8D%E5%86%99%E6%B3%95"><span class="toc-number">1.12.5.2.</span> <span class="toc-text">方法二 在程序中直接定义(两种写法)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89-%E9%97%B4%E6%8E%A5%E5%BC%95%E7%94%A8shell%E5%8F%98%E9%87%8F-%E5%BF%85%E9%A1%BB%E5%8A%A0BEGIN%E5%8A%A8%E4%BD%9C"><span class="toc-number">1.12.5.3.</span> <span class="toc-text">方法三 间接引用shell变量(必须加BEGIN动作)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-number">1.13.</span> <span class="toc-text">格式化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prinf%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA"><span class="toc-number">1.14.</span> <span class="toc-text">prinf格式化输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#format%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.15.</span> <span class="toc-text">format的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%92%88%E5%AF%B9%E5%A4%9A%E4%B8%AA%E5%8F%98%E9%87%8F%E8%BF%9B%E8%A1%8C%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-number">1.16.</span> <span class="toc-text">针对多个变量进行格式化</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/2709062073/" title="正则表达式与Linux文本三剑客Day2"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/gawr_guara_1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正则表达式与Linux文本三剑客Day2"/></a><div class="content"><a class="title" href="/posts/2709062073/" title="正则表达式与Linux文本三剑客Day2">正则表达式与Linux文本三剑客Day2</a><time datetime="2022-07-22T16:00:00.000Z" title="发表于 2022-07-23 00:00:00">2022-07-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4116585224/" title="Hexo自动部署脚本"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/shell.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hexo自动部署脚本"/></a><div class="content"><a class="title" href="/posts/4116585224/" title="Hexo自动部署脚本">Hexo自动部署脚本</a><time datetime="2022-07-21T16:00:00.000Z" title="发表于 2022-07-22 00:00:00">2022-07-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/138289152/" title="shell脚本学习Day8"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/gawr_gura8.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell脚本学习Day8"/></a><div class="content"><a class="title" href="/posts/138289152/" title="shell脚本学习Day8">shell脚本学习Day8</a><time datetime="2022-07-21T16:00:00.000Z" title="发表于 2022-07-22 00:00:00">2022-07-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/2558606737/" title="shell脚本学习Day7"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/gawr_gura7.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell脚本学习Day7"/></a><div class="content"><a class="title" href="/posts/2558606737/" title="shell脚本学习Day7">shell脚本学习Day7</a><time datetime="2022-07-19T16:00:00.000Z" title="发表于 2022-07-20 00:00:00">2022-07-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4018539783/" title="shell脚本学习Day6"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/post/gawr_gura6.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="shell脚本学习Day6"/></a><div class="content"><a class="title" href="/posts/4018539783/" title="shell脚本学习Day6">shell脚本学习Day6</a><time datetime="2022-07-18T16:00:00.000Z" title="发表于 2022-07-19 00:00:00">2022-07-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/post/gawr_gura_1.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Lptexas</div><div class="framework-info"><!-- span= _p('footer.framework') + ' '--><!-- a(href='https://hexo.io')= 'Hexo'--><!-- span.footer-separator |--><!-- span= _p('footer.theme') + ' '--><!-- a(href='https://github.com/jerryc127/hexo-theme-butterfly')= 'Butterfly'--><span>邮箱 </span><span class="footer-separator">|</span><a href="mailto:asucanyh@outlook.com">@Asucanyh</a></div><div class="framework-info"><!--img(src = '')--><!--span= ' '--><!--a(href='https://beian.miit.gov.cn/')= '待获取'--><img style="width:24px;height:24px;margin-bottom:-4px" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://www.beian.gov.cn/img/new/gongan.png"/><a href="https://beian.miit.gov.cn" target="_blank" data-pjax-state="">
+<span style="color:#ff0000">蜀</span>
+<span style="color:#ca7900">I</span>
+<span style="color:#48ab18">C</span>
+<span style="color:#2720ac">P</span>
+<span style="color:#9b17ae">备</span> 
+</a>
+<a href="https://beian.miit.gov.cn" target="_blank" data-pjax-state="external"> 
+<span style="color:#ff0000">20</span>
+<span style="color:#ca7900">22</span>
+<span style="color:#48ab18">01</span>
+<span style="color:#2720ac">84</span>
+<span style="color:#2778ac">59</span>
+<span style="color:#f40428">号</span>
+<span style="color:ff00880">-1</span>
+</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script></div><script type="text/javascript" color="238,130,238" opacity='0.9' zIndex="1" count="99" src="/js/canvas-nest.js"></script><div class="aplayer no-destroy" data-id="7209588651" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false" data-loop="all"> </div><script src="/js/schedule_index.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="❤富强❤,❤民主❤,❤文明❤,❤和谐❤,❤自由❤,❤平等❤,❤公正❤,❤法治❤,❤爱国❤,❤敬业❤,❤诚信❤,❤友善❤" data-fontsize="17px" data-random="false" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><!--if theme.aplayer && theme.aplayer.enable--><!--	.aplayer(data-id=theme.aplayer.id data-server=theme.aplayer.server data-type=theme.aplayer.type data-fixed=theme.aplayer.fixed data-mini=theme.aplayer.mini //data-listFolded=theme.aplayer.listFolded data-order=theme.aplayer.order data-preload=theme.aplayer.preload)--><!--	each item in theme.aplayer.css--><!--		link(rel='stylesheet', href=item)--><!--	each item in theme.aplayer.js--><!--		script(src=item)--><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
